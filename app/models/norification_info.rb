@@ -1,0 +1,2 @@
+class NorificationInfo < ApplicationRecord
+end
