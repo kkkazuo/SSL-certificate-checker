@@ -1,0 +1,2 @@
+class CheckingLog < ApplicationRecord
+end
