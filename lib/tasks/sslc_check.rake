@@ -14,4 +14,22 @@ namespace :sslc do
       end
     end
   end
+
+  desc 'notify slack from notification record'
+  task notify: :environment do
+    notifier = Slack::Notifier.new ENV['SLACKHOST'], username: 'sslc-notification'
+    notifications = Notification.all
+    notifications.each do |notification|
+      expiration_date = notification.expiration_date.strftime('%Y-%m-%d %H:%M')
+      created_at      = notification.created_at.strftime('%Y-%m-%d %H:%M')
+      domain          = notification.domain.fqdn
+      message         = "'#{domain}' will expire at #{expiration_date}. This notification was created at #{created_at}"
+      Notification.transaction do
+        notifier.ping message
+        notification.domain.checking_logs.create!(expiration_date: notification.expiration_date, notification: Time.now)
+        notification.destroy!
+      end
+    end
+    notifier.ping "Finish #{notifications.count} notifications!"
+  end
 end
