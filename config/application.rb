@@ -33,5 +33,7 @@ module SSLCertificateChecker
     config.api_only = true
     config.time_zone = 'Tokyo'
     config.active_record.default_timezone = :local
+    config.autoload_paths += %W(#{config.root}/lib)
+    config.enable_dependency_loading = true
   end
 end
