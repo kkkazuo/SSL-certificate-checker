@@ -19,3 +19,6 @@ development:
 production:
   <<: *default
   database: SSL-certificate-checker
+  username: ENV['DATABASE_USERNAME']
+  password: ENV['DATABASE_PASSWORD']
+  host: ENV['DATABASE_URL']
