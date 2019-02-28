@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_02_28_130056) do
+ActiveRecord::Schema.define(version: 2019_02_28_131718) do
 
   create_table "checking_logs", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.bigint "domain_id"
@@ -32,7 +32,9 @@ ActiveRecord::Schema.define(version: 2019_02_28_130056) do
     t.datetime "updated_at", null: false
     t.integer "certificate_type", default: 0
     t.datetime "notified_at"
+    t.integer "status", default: 0
     t.index ["domain_id"], name: "index_notifications_on_domain_id"
+    t.index ["status"], name: "index_notifications_on_status"
   end
 
   add_foreign_key "checking_logs", "domains"
