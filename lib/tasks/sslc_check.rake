@@ -1,14 +1,21 @@
-require 'net/http'
+include OpenSSL
 
 namespace :sslc do
   desc 'check SSL certificate expiration date and save checking records'
   task check: :environment do
     Domain.all.each do |domain|
-      uri = URI::HTTPS.build(host: domain.fqdn)
-      response = Net::HTTP.start(uri.host, uri.port, :use_ssl => true)
-      expiration_date = response.peer_cert.not_after
+      soc = TCPSocket.new(domain.fqdn, 443)
+      ssl = SSL::SSLSocket.new(soc)
+      ssl.connect
+      certificates = ssl.peer_cert_chain
       CheckingLog.transaction do
-        domain.notifications.create!(expiration_date: expiration_date) if (Time.now + 3.month) > expiration_date
+        certificates.each_with_index do |c, i|
+          expiration_time = c.not_after
+          if expiration_time < (Time.now + 3.month)
+            domain.notifications.create!(expiration_date: expiration_time) and next if i == 0
+            domain.notifications.create!(certificate_type: :intermediate, expiration_date: expiration_time)
+          end
+        end
         domain.checking_logs.create!
       end
     end
