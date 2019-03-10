@@ -8,6 +8,8 @@ namespace :sslc do
       ssl = SSL::SSLSocket.new(soc)
       ssl.connect
       certificates = ssl.peer_cert_chain
+      root_cert_authority = certificates.last.issuer.to_a.find{ |arr| arr[0]=='CN' }[1]
+      root_cert = OpenSSL::X509::Certificate.new(File.read("/etc/ssl/certs/#{root_cert_authority.gsub(' ', '_')}.pem"))
       CheckingLog.transaction do
         certificates.each_with_index do |c, i|
           expiration_time = c.not_after
@@ -16,6 +18,8 @@ namespace :sslc do
             domain.notifications.create!(certificate_type: :intermediate, expiration_date: expiration_time)
           end
         end
+        root_exp = root_cert.not_after
+        domain.notifications.create!(certificate_type: :root, expiration_date: root_exp) if root_exp < (Time.now + 3.month)
         domain.checking_logs.create!
       end
     end
