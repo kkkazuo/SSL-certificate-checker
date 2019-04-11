@@ -13,7 +13,7 @@ namespace :sslc do
       CheckingLog.transaction do
         certificates.each_with_index do |c, i|
           expiration_time = c.not_after
-          if expiration_time < (Time.now + 3.month)
+          if expiration_time < (Time.now + 3.month + 7.days)
             domain.notifications.create!(expiration_date: expiration_time) and next if i == 0
             domain.notifications.create!(certificate_type: :intermediate, expiration_date: expiration_time)
           end
