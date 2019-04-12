@@ -34,7 +34,7 @@ namespace :sslc do
       expiration_date = notification.expiration_date.strftime('%Y-%m-%d %H:%M')
       created_at      = notification.created_at.strftime('%Y-%m-%d %H:%M')
       domain          = notification.domain.fqdn
-      message         = "'#{domain} ( #{notification.certificate_type} )' will expire at #{expiration_date}. This notification was created at #{created_at}"
+      message         = "<!channel>\n'#{domain} ( #{notification.certificate_type} )' will expire at #{expiration_date}. This notification was created at #{created_at}"
       Notification.transaction do
         notifier.ping message
         notification.update!(status: :notified, notified_at: Time.now)
