@@ -7,6 +7,7 @@ gem 'puma', '~> 3.11'
 gem 'bootsnap', '>= 1.1.0', require: false
 gem 'slack-notifier'
 gem 'rb-readline'
+gem 'rack-attack'
 
 group :development, :test do
   gem 'byebug'

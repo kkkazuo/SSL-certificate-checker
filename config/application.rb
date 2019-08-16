@@ -16,5 +16,7 @@ module SSLCertificateChecker
     config.active_record.default_timezone = :local
     config.autoload_paths += %W(#{config.root}/lib)
     config.enable_dependency_loading = true
+
+    config.middleware.use Rack::Attack
   end
 end
