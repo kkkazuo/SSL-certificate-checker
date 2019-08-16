@@ -1,3 +1,5 @@
 Rails.application.routes.draw do
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+  resources :notifications, only: %i(index)
+  resources :checking_logs, only: %i(index)
+  resources :domains, only: %i(index)
 end
