@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 ruby '2.6.3'
 gem 'rails', '~> 5.2.2'
 gem 'mysql2'
-gem 'puma', '~> 3.11'
+gem 'puma', '~> 4.1'
 gem 'bootsnap', '>= 1.1.0', require: false
 gem 'slack-notifier'
 gem 'rb-readline'
